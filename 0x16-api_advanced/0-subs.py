@@ -1,41 +1,30 @@
 #!/usr/bin/python3
-""" A script that defines a function """
+""" A script that defines a function to get the number of subscribers. """
 
+import requests
 
 def number_of_subscribers(subreddit):
-    """ A function that queries the Reddit API and returns the number of
-        subscribers (not active users, total subscribers) for a given
-        subreddit. If an invalid subreddit is given, the function should
-        return 0.
+    """Queries the Reddit API and returns the number of subscribers for a given subreddit.
 
-        NOTE: No authentication is necessary for most features of the Reddit
-              API. If you’re getting errors related to Too Many Requests,
-              ensure you’re setting a custom User-Agent.
+    Args:
+        subreddit (str): The name of the subreddit.
 
-        Requirements:
-        - If not a valid subreddit, return 0.
-        - NOTE: Invalid subreddits may return a redirect to search results.
-                Ensure that you are not following redirects.
+    Returns:
+        int: The number of subscribers or 0 if the subreddit is invalid.
     """
-    import requests
-
-    hdrs = {
-        "User-Agent": "Mozilla/5.0",
+    url = f"https://www.reddit.com/r/{subreddit}/about.json"
+    headers = {
+        "User-Agent": "Mozilla/5.0 (compatible; RedditBot/1.0; +http://www.yourwebsite.com/bot)",
         "Accept": "application/json"
     }
-    url = f"https://www.reddit.com/r/{subreddit}/about/.json"
+
     try:
-        response = requests.get(url, headers=hdrs,
-                                allow_redirects=False)
-        if response.status_code != 200:
+        response = requests.get(url, headers=headers, allow_redirects=False)
+        if response.status_code == 200:
+            data = response.json().get("data", {})
+            return data.get("subscribers", 0)
+        else:
             return 0
-        try:
-            res_data = response.json()
-            if not all([res_data.get("data"),
-                        res_data["data"].get("subscribers")]):
-                return 0
-            return res_data["data"]["subscribers"]
-        except Exception:
-            return 0
-    except Exception:
+    except requests.RequestException:
         return 0
+
