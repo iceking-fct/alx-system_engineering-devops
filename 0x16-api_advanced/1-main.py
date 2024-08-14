@@ -9,7 +9,7 @@ def top_ten(subreddit):
     try:
         response = requests.get(url, headers=headers, allow_redirects=False)
         if response.status_code != 200:
-            print(f"Error: Received a {response.status_code} status code.")
+            print(None)
             return
 
         data = response.json().get("data", {})
@@ -22,8 +22,8 @@ def top_ten(subreddit):
         for post in posts:
             print(post["data"]["title"])
 
-    except requests.RequestException as e:
-        print(f"Request failed: {e}")
-    except Exception as e:
-        print(f"An error occurred: {e}")
+    except requests.RequestException:
+        print(None)
+    except Exception:
+        print(None)
 
