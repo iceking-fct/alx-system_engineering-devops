@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+#Serve a page with Nginx: configure Nginx to serve your page from the route /airbnb-onepage/
+
+server {
+	listen 80 default_server;
+	listen [::]:80 default_server;
+
+	root /var/www/html;
+	server_name _;
+	add_header X-Served-By $hostname;
+
+	location / {
+		root /var/www/html;
+		try_files $uri $uri/ =404;
+	}
+
+	location /airbnb-onepage/{
+		proxy_pass http://0.0.0.0:5000;
+	}
+}

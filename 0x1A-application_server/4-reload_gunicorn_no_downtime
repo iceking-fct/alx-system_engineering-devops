@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# A script that reloads gunicorn in a gracefull way.
+# I used this method because both my app and api servers are running in the background,
+# +and I had to target only that of the app server, not the api.
+sudo kill -HUP "$(pgrep gunicorn | sort -n | head -1) 2>/dev/null"
