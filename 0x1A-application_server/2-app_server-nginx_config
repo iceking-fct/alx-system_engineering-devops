@@ -1,20 +1,28 @@
 #!/usr/bin/env bash
 #Serve a page with Nginx: configure Nginx to serve your page from the route /airbnb-onepage/
-
 server {
-	listen 80 default_server;
-	listen [::]:80 default_server;
+    # Listen's on port 80
+    listen      80 default_server;
+    listen      [::]:80 default_server ipv6only=on;
 
-	root /var/www/html;
-	server_name _;
-	add_header X-Served-By $hostname;
 
-	location / {
-		root /var/www/html;
-		try_files $uri $uri/ =404;
-	}
+    #ip address of your domain name/server
+    server_name  34.207.120.10;
 
-	location /airbnb-onepage/{
-		proxy_pass http://0.0.0.0:5000;
-	}
+
+    #custom header name
+    add_header  X-Served-By $HOSTNAME;
+
+
+    # serve /airbnb-onepage/ route from AirBnb_clone_v2
+    location = /airbnb-onepage/ {
+        proxy_pass http://127.0.0.1:5000/airbnb-onepage/;
+    }
+
+    # 404 error handling page
+    error_page 400 /404.html;
+    location /404 {
+        root /var/www/html;
+        internal;
+    }
 }
