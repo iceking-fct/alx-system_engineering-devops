@@ -33,7 +33,7 @@ def get_employee_todos_progress(employee_id):
         for task in task_done:
             print(f"\t {task['title']}")
     except Exception as e:
-        print(f"an error occurd: {e}")
+        print(f"an error occured: {e}")
 
 
 if __name__ == "__main__":
