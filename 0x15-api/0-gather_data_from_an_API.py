@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+
 '''Gather users data from an API'''
 
 
