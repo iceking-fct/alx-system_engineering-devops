@@ -1,9 +1,20 @@
 #!/usr/bin/env bash
-# a script that configures an nginx server to return a string
-# content of the string is 'hello world'
+# A script that configures an nginx server to return a string
+# The content of the string must be 'Hello World!'
 
+# Update package list and install nginx
+apt-get update
+apt-get install nginx -y
+
+# Modify nginx default site configuration
 var='/etc/nginx/sites-available/default'
-apt install nginx -y
-sed -Ei 's/index\s+.*;$/index index.html;/g' "$var"
-echo "Hello World!" > '/var/www/html/index.html'
-/etc/init.d/nginx start
+
+# Change the root directory and ensure index.html is served
+sed -i 's|root /var/www/html;|root /var/www/html;|' "$var"
+sed -i 's|index.nginx-debian.html|index.html|' "$var"
+
+# Create an index.html file with 'Hello World!' string
+echo "Hello World!" > /var/www/html/index.html
+
+# Restart Nginx to apply the changes
+/etc/init.d/nginx restart
