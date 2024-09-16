@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# a script that configures an nginx server to return a string
+# content of the string is 'hello world'
+
+var='/etc/nginx/sites-available/default'
+apt install nginx -y
+sed -Ei 's/index\s+.*;$/index index.html;/g' "$var"
+echo "Hello World!" > '/var/www/html/index.html'
+/etc/init.d/nginx start
