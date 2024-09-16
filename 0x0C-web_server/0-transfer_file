@@ -7,26 +7,25 @@
 #      => The username scp connects with
 #      => The path to the SSH private key that scp uses
 #  -> Displays Usage: 0-transfer_file PATH_TO_FILE IP USERNAME PATH_TO_SSH_KEY
-#     + if less than 3 parameters passed
-#  -> scp transfers the file to the users home directory ~/
+#     + if less than 4 parameters passed
+#  -> scp transfers the file to the user's home directory ~/
 #  -> Strict host key checking must be disabled when using scp
 
-if (("$#" < 3)); then
+# Check if fewer than 4 parameters are passed
+if (("$#" < 4)); then
     echo "Usage: 0-transfer_file PATH_TO_FILE IP USERNAME PATH_TO_SSH_KEY"
     exit 1
 fi
 
-
-
-if (("$#" >= 4)); then
-    ssh_key="$(realpath $4)"
-else
-   ssh_key="$(realpath ~/.ssh/school)"
-fi
-
+# Capture input arguments
 vsource="$1"
-vdest="~/"
-vuser="$3"
 vip="$2"
+vuser="$3"
+ssh_key="$(realpath "$4")"  # Get absolute path for the SSH key
 
-scp  -i "$ssh_key" -o "StrictHostKeyChecking=off" "$vsource" "$vuser"@"$vip":"$vdest"
+# Destination directory
+vdest="~/"
+
+# Perform the file transfer using scp
+scp -i "$ssh_key" -o "StrictHostKeyChecking=off" "$vsource" "$vuser@$vip:$vdest"
+
