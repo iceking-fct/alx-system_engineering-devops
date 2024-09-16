@@ -2,7 +2,7 @@
 #Let’s install the ufw firewall and setup a few rules on web-01.
 
 
-sudo apt install -y uwf
+sudo apt install -y ufw
 sudo ufw default allow outgoing
 sudo ufw default deny incoming
 sudo ufw allow 22
